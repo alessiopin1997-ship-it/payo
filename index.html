@@ -4,27 +4,29 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f4efe6">
+<meta name="theme-color" content="#f5ead0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Payo">
 <meta name="format-detection" content="telephone=no">
 <title>Payo · split trip costs with just a link</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M6 3h20v26l-3.3-3-3.3 3-3.4-3-3.3 3-3.4-3L6 29z' fill='%23ff5a1f'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M6 3h20v26l-3.3-3-3.3 3-3.4-3-3.3 3-3.4-3L6 29z' fill='%23efc14f' stroke='%231c1d21' stroke-width='1.5'/%3E%3C/svg%3E">
 <style>
-:root{--bg:#f4efe6;--card:#fffdf8;--ink:#1d1a16;--mute:#7a7266;--line:#e6decf;--acc:#ff5a1f;--pos:#0e8a68;--neg:#d4433b;--chip:#efe8db;
+:root{--bg:#f5ead0;--card:#fffaf0;--ink:#1b1d2b;--mute:#5d586b;--line:#e3d6b8;--acc:#e9b93d;--on-acc:#1b1d2b;--acc-ink:#7a5200;--pos:#0a7155;--neg:#b5332a;--chip:#efe2c3;--tom:#d23f31;--on-tom:#fff6e6;--tk-bg:var(--ink);--tk-fg:var(--bg);
+  --round:ui-rounded,"SF Pro Rounded","Arial Rounded MT Bold","Nunito",system-ui,sans-serif;
   --shadow:0 1px 0 rgba(0,0,0,.03),0 10px 28px -16px rgba(70,45,10,.35);
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-[data-theme=dark]{--bg:#11100e;--card:#1b1916;--ink:#f3eee5;--mute:#9a9184;--line:#2e2a25;--acc:#ff6a33;--pos:#3cc79a;--neg:#ff6b61;--chip:#272420;
+[data-theme=dark]{--bg:#13161f;--card:#1b1f2c;--ink:#f1e9d6;--mute:#a7a3b6;--line:#2a2f40;--acc:#e9b93d;--on-acc:#1b1d2b;--acc-ink:#f0c95a;--pos:#57c49b;--neg:#f08a7e;--chip:#252a3a;--tom:#d9483b;--on-tom:#fff3e0;--tk-bg:#d9cdb0;--tk-fg:#1b1d2b;
   --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 30px -16px rgba(0,0,0,.8)}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:15px/1.45 var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh;transition:background .3s,color .3s}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 button:active{transform:translateY(1px)}
-:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+:focus-visible{outline:2px solid var(--acc-ink);outline-offset:2px}
 kbd{font:11px var(--mono);padding:1px 6px;border-radius:5px;background:var(--chip);color:var(--ink)}
 .mute{color:var(--mute)}.small{font-size:13px}.sp{flex:1}
 .pos{color:var(--pos)}.neg{color:var(--neg)}
@@ -45,21 +47,25 @@ kbd{font:11px var(--mono);padding:1px 6px;border-radius:5px;background:var(--chi
 .card,.ticket{min-width:0}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
 h2{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--mute);margin:0 0 12px;font-weight:700}
-.demo{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;border-radius:14px;background:color-mix(in srgb,var(--acc) 13%,var(--card));border:1px solid color-mix(in srgb,var(--acc) 30%,transparent);font-size:14px}
+.demo{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;border-radius:14px;background:color-mix(in srgb,var(--acc) 22%,var(--card));border:1px solid color-mix(in srgb,var(--acc) 30%,transparent);font-size:14px}
+[data-theme=dark] .demo{background:color-mix(in srgb,var(--acc) 11%,var(--card));border-color:color-mix(in srgb,var(--acc) 28%,transparent)}
 .summary{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
 .big{font:750 clamp(34px,6vw,50px)/1.05 var(--sans);letter-spacing:-.035em;font-variant-numeric:tabular-nums;margin:2px 0 4px}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
-.primary{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:10px 16px;font-weight:650}
-.primary kbd{background:rgba(255,255,255,.25);color:#fff;margin-left:6px}
+.primary{background:var(--acc);color:var(--on-acc);border:0;border-radius:12px;padding:10px 16px;font-weight:650}
+.primary kbd{background:color-mix(in srgb,var(--on-acc) 14%,transparent);color:var(--on-acc);margin-left:6px}
 .ghost{background:transparent;border:1px solid var(--line);border-radius:12px;padding:10px 14px}
 .danger{color:var(--neg)!important;border-color:color-mix(in srgb,var(--neg) 45%,transparent)!important}
-.link{background:none;border:0;color:var(--acc);padding:0;font-size:13px;font-weight:650}
+.link{background:none;border:0;color:var(--acc-ink);padding:0;font-size:13px;font-weight:650}
 input,select{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;min-width:0;font-size:16px;color:var(--ink)}
 input.err{border-color:var(--neg)}
+::placeholder{color:var(--mute);opacity:1}
 
 /* balances */
 .bal,.settle,.trip-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.bal li{display:grid;grid-template-columns:30px minmax(56px,1fr) minmax(60px,1.1fr) auto;gap:10px;align-items:center}
+.bal{grid-template-columns:30px minmax(56px,1fr) minmax(60px,1.1fr) auto;column-gap:10px}
+.bal li{grid-column:1/-1;display:grid;grid-template-columns:subgrid;align-items:center}
+.bal li.empty{display:block}
 .av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;background:hsl(var(--h) 70% 86%);color:hsl(var(--h) 55% 26%)}
 [data-theme=dark] .av{background:hsl(var(--h) 32% 26%);color:hsl(var(--h) 80% 84%)}
 .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:560}
@@ -87,23 +93,23 @@ input.err{border-color:var(--neg)}
 .empty{padding:28px 8px;text-align:center;color:var(--mute);display:block}
 
 /* the ticket: signature element */
-.ticket{position:relative;background:var(--ink);color:var(--bg);border-radius:18px;padding:16px 18px 18px;box-shadow:var(--shadow)}
+.ticket{position:relative;background:var(--tk-bg);color:var(--tk-fg);border-radius:18px;padding:16px 18px 18px;box-shadow:var(--shadow)}
 .ticket::before,.ticket::after{content:'';position:absolute;top:38px;width:18px;height:18px;border-radius:50%;background:var(--bg)}
 .ticket::before{left:-9px}.ticket::after{right:-9px}
-.t-head{display:flex;justify-content:space-between;gap:8px;font:650 11px var(--mono);letter-spacing:.12em;padding-bottom:14px;border-bottom:2px dashed color-mix(in srgb,var(--bg) 28%,transparent);margin-bottom:16px}
+.t-head{display:flex;justify-content:space-between;gap:8px;font:650 11px var(--mono);letter-spacing:.12em;padding-bottom:14px;border-bottom:2px dashed color-mix(in srgb,var(--tk-fg) 28%,transparent);margin-bottom:16px}
 .t-body{display:grid;grid-template-columns:136px minmax(0,1fr);gap:16px;align-items:center}
 .qr-mini{width:136px;aspect-ratio:1;padding:4px;background:#fff;border:0;border-radius:12px;display:grid;place-items:center;cursor:zoom-in}
 .qr-mini svg,.qr-big svg{width:100%;height:100%;display:block}
 .qr-mini.print svg{animation:print .8s cubic-bezier(.3,.7,.2,1)}
 .qr-none{font-size:12px;color:#5a5248;text-align:center;padding:8px;line-height:1.35}
 .qr-big{background:#fff;border-radius:16px;padding:8px;width:min(100%,60vh);aspect-ratio:1;margin:0 auto}
-.file-btn{display:inline-block;margin-top:8px;font-size:13px;color:var(--acc);font-weight:650;cursor:pointer}
+.file-btn{display:inline-block;margin-top:8px;font-size:13px;color:var(--acc-ink);font-weight:650;cursor:pointer}
 @keyframes print{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
-.t-code{font:11px var(--mono);opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-code{font:11px var(--mono);opacity:.72;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .t-note{font-size:13px;opacity:.82;margin:8px 0 0}
 .t-actions{margin-top:16px}
 .t-actions{display:flex;gap:8px;flex-wrap:wrap}
-.ticket .ghost{border-color:color-mix(in srgb,var(--bg) 35%,transparent);color:var(--bg)}
+.ticket .ghost{border-color:color-mix(in srgb,var(--tk-fg) 35%,transparent);color:var(--tk-fg)}
 .ticket.flash{animation:flash .9s}
 @keyframes flash{30%{box-shadow:0 0 0 4px var(--acc)}}
 
@@ -117,12 +123,26 @@ h3{margin:0 0 16px;font-size:21px;letter-spacing:-.02em}
 h4{margin:20px 0 8px;font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.08em}
 label{display:grid;gap:6px;font-size:13px;color:var(--mute);margin-bottom:12px}
 .row2{display:grid;grid-template-columns:1.25fr 1fr;gap:10px}
-#calcOut{font:12px var(--mono);min-height:1.2em}
-.lab{font-size:13px;color:var(--mute);margin-bottom:8px;display:flex;justify-content:space-between}
+#calcOut{font:12px var(--mono)}
+#calcOut:empty,.err-msg:empty{display:none}
+.err-msg{color:var(--neg);font-size:13px;margin:6px 0 0}
+#calcOut.err-msg{font:13px var(--sans)}
+#each.err-msg{margin-top:8px}
+input.err:focus-visible{outline-color:var(--neg)}
+.m-only{display:none}
+.dlg-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:-6px -6px 16px 0}.dlg-head h3{margin:0}
+#dlgTrips .dlg-actions>button{flex:1}
+.lab{font-size:13px;color:var(--mute);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 13px}
-.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.dlg-actions{display:flex;gap:8px;margin-top:20px;align-items:center}
+.chip[aria-pressed=true],.chip[aria-checked=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+/* dark mode: selected chips use a soft gold tint instead of a bright white pill */
+[data-theme=dark] .chip[aria-pressed=true],[data-theme=dark] .chip[aria-checked=true]{background:color-mix(in srgb,var(--acc) 24%,var(--card));color:var(--ink);border-color:var(--acc)}
+.row2{align-items:start}
+.go>span{min-width:0}.go b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.go>.mute{white-space:nowrap}
+.settle .who{display:flex;gap:6px;align-items:baseline;min-width:0;flex-wrap:wrap}
+.dlg-actions{display:flex;gap:8px;margin-top:20px;align-items:center;flex-wrap:wrap}
+.dlg-actions button{white-space:nowrap}
 .stack{display:grid;gap:8px}
 .prow{display:flex;gap:8px}
 .prow button{flex:none;width:44px}
@@ -130,7 +150,8 @@ label{display:grid;gap:6px;font-size:13px;color:var(--mute);margin-bottom:12px}
 .trip-list{gap:6px}
 .trip-list li{display:flex;gap:8px}
 .go{flex:1;min-width:0;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.go.cur{border-color:var(--acc)}
+.go.cur{border-color:var(--acc-ink)}
+.go.new{width:100%;margin-top:6px;justify-content:center;border-style:dashed;font-weight:650;min-height:44px}
 .rm{padding:8px 12px;font-size:13px}
 .help p,.help li{line-height:1.55}
 .help ol{padding-left:20px;margin:8px 0}
@@ -139,12 +160,76 @@ label{display:grid;gap:6px;font-size:13px;color:var(--mute);margin-bottom:12px}
 /* toast + fab */
 #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,150px);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;display:flex;gap:14px;align-items:center;transition:transform .35s cubic-bezier(.2,.9,.3,1.1),opacity .25s,visibility .35s;z-index:30;max-width:calc(100vw - 32px);font-size:14px;opacity:0;visibility:hidden;box-shadow:0 12px 30px -10px rgba(0,0,0,.4)}
 #toast.on{transform:translate(-50%,0);opacity:1;visibility:visible}
-#toast button{background:transparent;border:0;color:var(--acc);font-weight:750;padding:0}
-.fab{display:none;position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;background:var(--acc);color:#fff;font-size:30px;line-height:1;border:0;box-shadow:0 12px 26px -8px var(--acc);z-index:6}
+#toast{width:max-content}
+/* inside an open dialog: drop in from the top so it never covers the dialog's buttons */
+dialog #toast{top:calc(12px + env(safe-area-inset-top));bottom:auto;transform:translate(-50%,-150px)}
+dialog #toast.on{transform:translate(-50%,0)}
+#toast button{background:var(--acc);border:0;color:var(--on-acc);font-weight:750;padding:5px 12px;border-radius:999px;white-space:nowrap}
+.fab{display:none;position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;background:var(--acc);color:var(--on-acc);font-size:30px;line-height:1;border:0;box-shadow:0 12px 26px -10px rgba(0,0,0,.45);z-index:6}
+
+/* ===== Carosello world: flat poster shapes, rounded heavy type, squeezable blobs ===== */
+.logo{font:900 22px var(--round);letter-spacing:-.03em}
+.logo i{width:16px;height:16px;border-radius:50%;background:var(--tom);clip-path:none}
+.top{border-bottom:0}
+h2{font:800 12px var(--round);letter-spacing:.08em}
+.card{border:0;box-shadow:none;border-radius:24px}
+.primary,.ghost{border-radius:999px;font-weight:700}
+.ghost{border:1.5px solid var(--line)}
+.trip-btn{font-family:var(--round);font-weight:800}
+.demo{background:var(--chip);border:0;border-radius:20px}
+[data-theme=dark] .demo{background:var(--chip)}
+/* the poster block: total "squeezed" on a mayo field with a tomato disc bleeding off its corner */
+.summary{position:relative;overflow:hidden;background:var(--acc);color:var(--on-acc);border-radius:30px 30px 30px 10px;padding:20px 22px}
+.summary::after{content:'';position:absolute;right:-40px;top:-56px;width:176px;height:176px;border-radius:50%;background:var(--tom);pointer-events:none}
+.summary>*{position:relative;z-index:1}
+.summary .big{font:900 clamp(54px,14.5vw,76px)/1 var(--round);letter-spacing:-.05em;margin:2px 0 8px}
+.summary .big.long{font-size:clamp(40px,10.5vw,60px)}
+.summary #sub{color:color-mix(in srgb,var(--on-acc) 80%,var(--acc));font-weight:600}
+.summary .primary{background:var(--on-acc);color:var(--acc)}
+.summary .primary kbd{background:color-mix(in srgb,var(--acc) 22%,transparent);color:var(--acc)}
+.summary .ghost{border-color:var(--on-acc);color:var(--on-acc)}
+/* balances as squeezable blobs: full (owed) vs empty (owes) */
+.bal.blobs{display:flex;align-items:flex-end;gap:10px;min-height:150px}
+.bal.blobs li{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.bal.blobs .nm{max-width:100%;font:800 14px var(--round);margin-top:4px}
+.bal.blobs .amt{font-size:13px;text-align:center}
+.blob{display:block;width:min(100%,84px);height:calc(14px + var(--s) * 96px);border-radius:50% 50% 44% 44%/62% 62% 38% 38%;transform-origin:50% 100%}
+.blob.p{background:var(--pos)}
+.blob.n{background:color-mix(in srgb,var(--neg) 22%,transparent);box-shadow:inset 0 0 0 2.5px var(--neg)}
+.blob.z{height:12px;background:var(--chip)}
+.blob.squish{animation:squish .6s cubic-bezier(.3,1.5,.5,1)}
+@keyframes squish{0%{transform:scale(1)}30%{transform:scale(1.18,.78)}60%{transform:scale(.94,1.08)}100%{transform:scale(1)}}
+/* settle up and expenses */
+.settle li{background:var(--bg);border-radius:20px;padding:12px 14px}
+.settle .who b{font-family:var(--round);font-weight:800}
+.settle button{background:var(--acc);color:var(--on-acc);border:0;border-radius:999px;font-weight:800;padding:6px 14px}
+.settle li.done{display:block;text-align:center;padding:18px;background:var(--acc);color:var(--on-acc);font:900 18px var(--round)}
+.emo{border-radius:16px;background:var(--chip)}
+.ex-d{font-family:var(--round);font-weight:800}
+.exp{border-radius:16px}
+.day{font-family:var(--round);font-weight:800}
+/* dialogs and controls in the same grammar */
+dialog{border:0;border-radius:28px}
+h3{font:900 24px var(--round);letter-spacing:-.03em}
+input,select{border-radius:14px;border:1.5px solid var(--line)}
+.chip{font-weight:700;border-width:1.5px}
+.go{border-radius:18px}
+.fab{background:var(--tom);color:var(--on-tom);display:none;place-items:center}
+::selection{background:color-mix(in srgb,var(--acc) 45%,transparent);color:var(--ink)}
+input,select{caret-color:var(--tom);accent-color:var(--acc)}
+.icon svg{display:block}
+button svg{pointer-events:none}
+/* 7+ people: bars in the same grammar as the blobs (full mint / hollow tomato pill) */
+.bal:not(.blobs) .bar{height:14px;border-radius:999px;background:var(--chip)}
+.bal:not(.blobs) .bar .p{background:var(--pos);border-radius:999px}
+.bal:not(.blobs) .bar .n{background:color-mix(in srgb,var(--neg) 22%,transparent);box-shadow:inset 0 0 0 2px var(--neg);border-radius:999px}
+.bal:not(.blobs) .av{background:var(--chip);color:var(--ink);font-family:var(--round);font-weight:900}
+.bal.blobs.flat{min-height:0}
+.ticket{border-radius:24px}
 
 @media (max-width:760px){
   .grid{grid-template-columns:minmax(0,1fr);padding:12px;gap:12px}
-  .fab{display:block}
+  .fab{display:grid}
   #addBtn{display:none}
   body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
   #toast{bottom:92px}
@@ -152,48 +237,75 @@ label{display:grid;gap:6px;font-size:13px;color:var(--mute);margin-bottom:12px}
   .grid{padding-left:calc(12px + env(safe-area-inset-left));padding-right:calc(12px + env(safe-area-inset-right))}
   .fab{right:calc(18px + env(safe-area-inset-right))}
   #toast{bottom:calc(92px + env(safe-area-inset-bottom))}
-  .logo span{display:none}
+  .logo{font-size:19px}
+  .summary::after{width:132px;height:132px;right:-38px;top:-64px}
+  /* below the poster, sections sit on the ground: no card stack */
+  .grid>.col>.card,.grid>section.card:not(.summary){background:transparent;padding:6px 10px 0}
+  h2{font:900 19px var(--round);letter-spacing:-.01em;text-transform:none;color:var(--ink)}
+  .demo{padding:10px 10px 10px 14px;font-size:13px;gap:10px;flex-wrap:nowrap}.demo .primary{padding:0 14px;flex:none;font-size:14px}
+  /* settle rows in one line: [Mark paid] Sofia pays Giulia ... amount (button stays clear of +) */
+  .settle li{display:flex;flex-wrap:nowrap;gap:10px;padding:8px 12px 8px 8px}
+  .settle li>button{order:-1;flex:none}
+  .settle .who{flex:1;font-size:14px}
+  .settle li .amt{margin-left:0}
+  /* phone order: Summary, Balances, Settle up, Expenses, then the ticket */
+  .col{display:contents}
+  .ticket{order:1}
+  /* sharing lives in the top card on phones; Trip settings moves to the trip menu */
+  .m-only{display:inline-flex;align-items:center;justify-content:center}
+  #settingsBtn{display:none}
+  .summary .actions{width:100%}.summary .actions>.m-only{flex:1}
 }
-@media (max-width:420px){.pill{display:none}.row2{grid-template-columns:1fr}.t-body{grid-template-columns:104px minmax(0,1fr);gap:12px}.qr-mini{width:104px}}
+/* touch: 44px targets, no keyboard hints */
+@media (pointer:coarse){
+  .primary,.ghost,.chip,.settle button,.trip-btn,.rm,.go{min-height:44px}
+  .settle button{padding:0 14px}
+  .icon{width:44px;height:44px}
+  .link{min-height:44px;padding:0 2px}
+  .file-btn{padding:12px 0}
+}
+@media (hover:none){kbd,.kbd-only{display:none}}
+@media (max-width:420px){.pill{display:none}.row2{grid-template-columns:1fr;row-gap:0}.t-body{grid-template-columns:104px minmax(0,1fr);gap:12px}.qr-mini{width:104px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <header class="top">
-  <div class="logo"><i></i><span>Payo</span></div>
+  <div class="logo"><i></i><span>payo!</span></div>
   <button id="tripBtn" class="trip-btn" title="Your trips (G)"><span id="tripName">…</span><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
   <div class="sp"></div>
-  <button id="sizeBtn" class="pill" title="The whole trip is in the link: see it">🔗 <span id="sizeTxt">…</span></button>
+  <button id="sizeBtn" class="pill" title="The whole trip is in the link: see it"><svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 9.5l3-3M7 4.5l1.3-1.3a2.8 2.8 0 0 1 4 4L11 8.5M9 11.5l-1.3 1.3a2.8 2.8 0 0 1-4-4L5 7.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> <span id="sizeTxt">…</span></button>
   <button id="themeBtn" class="icon" title="Toggle theme (T)" aria-label="Toggle theme">◐</button>
   <button id="helpBtn" class="icon" title="How it works (?)" aria-label="Help">?</button>
 </header>
 
 <main class="grid">
   <div id="demo" class="demo span" hidden>
-    <span><b>This is a demo trip.</b> Tap anything to try it, or press <kbd>?</kbd> to see how it works.</span>
-    <button id="startOwn" class="primary">Start your own trip</button>
+    <span id="bannerTxt"></span>
+    <button id="bannerBtn" class="primary"></button>
   </div>
 
   <section class="card summary span">
     <div>
-      <div class="mute small">Total spent</div>
       <div id="total" class="big">…</div>
       <div id="sub" class="mute small"></div>
     </div>
     <div class="actions">
       <button id="settingsBtn" class="ghost">Trip settings</button>
+      <button id="share2" class="primary m-only">Copy link</button>
+      <button id="qr2" class="ghost m-only">Show QR</button>
       <button id="addBtn" class="primary">+ Add expense<kbd>N</kbd></button>
     </div>
   </section>
 
   <div class="col">
     <section class="card">
-      <h2>Balances</h2>
+      <h2>Who’s full, who’s empty</h2>
       <ul id="bal" class="bal"></ul>
       <form id="addPerson" class="inline" autocomplete="off"><input placeholder="Add a person" maxlength="24" aria-label="Add a person"><button class="ghost">Add</button></form>
     </section>
     <section class="card">
-      <h2>Settle up</h2>
+      <h2>To settle up</h2>
       <ul id="settle" class="settle"></ul>
     </section>
     <section id="ticket" class="ticket">
@@ -221,17 +333,21 @@ label{display:grid;gap:6px;font-size:13px;color:var(--mute);margin-bottom:12px}
   </section>
 </main>
 
-<button id="fab" class="fab" aria-label="Add expense">+</button>
+<button id="fab" class="fab" aria-label="Add expense"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></button>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <dialog id="dlgExp"><form id="expForm" class="dlg" autocomplete="off">
   <h3 id="expTitle">New expense</h3>
   <label>What for<input name="d" maxlength="60" placeholder="Dinner, taxi, tickets…"></label>
   <div class="row2">
-    <label>Amount<input name="a" inputmode="decimal" placeholder="24.50 or 3×14.50"><span id="calcOut"></span></label>
+    <label>Amount<input name="a" inputmode="decimal" placeholder="24.50 or 3×14.50" aria-describedby="calcOut"><span id="calcOut" aria-live="polite"></span></label>
     <label>Date<input name="day" type="date"></label>
   </div>
-  <label>Paid by<select name="p"></select></label>
+  <div class="lab"><span id="payLab">Paid by</span></div>
+  <div id="payChips" class="chips" role="radiogroup" aria-labelledby="payLab"></div>
+  <p id="payErr" class="err-msg" role="alert"></p>
+  <input type="hidden" name="p">
+  <div style="height:14px"></div>
   <div class="lab"><span>Split between</span><button type="button" id="allBtn" class="link">everyone / no one</button></div>
   <div id="chips" class="chips"></div>
   <p id="each" class="mute small"></p>
@@ -244,18 +360,26 @@ label{display:grid;gap:6px;font-size:13px;color:var(--mute);margin-bottom:12px}
 </form></dialog>
 
 <dialog id="dlgTrips"><div class="dlg">
-  <h3>Your trips</h3>
+  <div class="dlg-head"><h3>Your trips</h3><button type="button" class="icon" data-close aria-label="Close"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
   <ul id="tripList" class="trip-list"></ul>
-  <h4>Open or merge a link</h4>
-  <form id="mergeForm" class="inline" style="margin:0" autocomplete="off"><input name="l" placeholder="Paste a Payo link or code" aria-label="Payo link"><button class="primary">Open</button></form>
+  <button type="button" id="toNew" class="go new">+ New trip</button>
+  <div class="dlg-actions"><button type="button" id="toSettings" class="ghost">Trip settings</button><button type="button" id="toMerge" class="ghost">Merge a link</button></div>
+</div></dialog>
+
+<dialog id="dlgNew"><form id="newForm" class="dlg" autocomplete="off">
+  <h3>New trip</h3>
+  <label>Trip name<input name="n" placeholder="Dolomites 2027" maxlength="40"></label>
+  <label>Who’s in?<input name="m" placeholder="Anna, Ben, Chiara"></label>
+  <label>Currency<select name="c"></select></label>
+  <div class="dlg-actions"><span class="sp"></span><button type="button" class="ghost" data-close>Cancel</button><button class="primary">Create trip</button></div>
+</form></dialog>
+
+<dialog id="dlgMerge"><div class="dlg">
+  <h3>Merge a link</h3>
+  <p class="mute small" style="margin:-8px 0 14px">Paste the Payo link a friend sent back. Their expenses join yours, with no duplicates.</p>
+  <form id="mergeForm" class="inline" style="margin:0" autocomplete="off"><input name="l" placeholder="Paste a Payo link or code" aria-label="Payo link" aria-describedby="mergeErr"><button class="primary">Merge</button></form>
+  <p id="mergeErr" class="err-msg" role="alert"></p>
   <label class="file-btn">Or open a backup file…<input id="fileIn" type="file" accept=".txt,text/plain" hidden></label>
-  <h4>New trip</h4>
-  <form id="newForm" class="stack" autocomplete="off">
-    <input name="n" placeholder="Trip name: Dolomites 2027" maxlength="40" aria-label="Trip name">
-    <input name="m" placeholder="Who's in? Anna, Ben, Chiara" aria-label="People">
-    <select name="c" aria-label="Currency"></select>
-    <button class="primary">Create trip</button>
-  </form>
   <div class="dlg-actions"><span class="sp"></span><button type="button" class="ghost" data-close>Close</button></div>
 </div></dialog>
 
@@ -265,7 +389,8 @@ label{display:grid;gap:6px;font-size:13px;color:var(--mute);margin-bottom:12px}
   <label>Currency<select name="c"></select></label>
   <div class="lab"><span>People</span><span class="small">✕ only for people with no expenses</span></div>
   <div id="setPeople" class="stack"></div>
-  <div class="dlg-actions"><button type="button" id="backupBtn" class="ghost" title="Download backup (B)">Download backup</button><span class="sp"></span><button type="button" class="ghost" data-close>Cancel</button><button class="primary">Save</button></div>
+  <button type="button" id="backupBtn" class="link" title="Download backup (B)">Download a backup file</button>
+  <div class="dlg-actions"><span class="sp"></span><button type="button" class="ghost" data-close>Cancel</button><button class="primary">Save</button></div>
 </form></dialog>
 
 <dialog id="dlgQr"><div class="dlg">
@@ -277,7 +402,7 @@ label{display:grid;gap:6px;font-size:13px;color:var(--mute);margin-bottom:12px}
 
 <dialog id="dlgHelp"><div class="dlg help">
   <h3>How Payo works</h3>
-  <p>Payo splits group expenses, and <b>the link is the database</b>. The whole trip is compressed into the address you share, so nothing is ever uploaded anywhere.</p>
+  <p>Payo splits group expenses. <b>Everything lives in the link you share</b>: nothing is uploaded, and nobody needs an account.</p>
   <ol>
     <li>Create a trip and add what you paid.</li>
     <li><b>Copy link</b> and drop it in the group chat.</li>
@@ -285,8 +410,8 @@ label{display:grid;gap:6px;font-size:13px;color:var(--mute);margin-bottom:12px}
     <li>Open or paste any link you get back. Payo <b>merges</b> it: new expenses, edits and deletions combine with no duplicates, in any order.</li>
   </ol>
   <p class="mute small">At the same table? Press <b>Show QR</b> and friends scan it with their phone camera. Amounts accept math (<code>3*14.50</code>, <code>120/4</code>). “Mark paid” records a settlement. Your trip lives in three places: this browser, every link you've shared, and any backup file you download. Nothing is ever sent over the network.</p>
-  <h4>Shortcuts</h4>
-  <div class="keys">
+  <h4 class="kbd-only">Shortcuts</h4>
+  <div class="keys kbd-only">
     <kbd>N</kbd><span>Add expense</span>
     <kbd>S</kbd><span>Copy the trip link</span>
     <kbd>G</kbd><span>Your trips / new trip</span>
@@ -336,7 +461,7 @@ function merge(a, b) {
   return r;
 }
 const changes = (a, b) => ['members', 'exp'].reduce((n, k) =>
-  n + Object.keys(b[k]).filter(i => JSON.stringify(a[k][i]) !== JSON.stringify(b[k][i])).length, 0) + (a.name !== b.name || a.cur !== b.cur ? 1 : 0);
+  n + Object.keys(b[k]).filter(i => JSON.stringify(a[k][i]) !== JSON.stringify(b[k][i]) && !(!a[k][i] && b[k][i].f & 1)).length, 0) + (a.name !== b.name || a.cur !== b.cur ? 1 : 0);
 
 // Balances in integer cents; leftover cents go to the first people so totals are exact.
 function compute(T) {
@@ -515,7 +640,8 @@ const guessCur = () => { const l = navigator.language || ''; return /US$/.test(l
 const fmts = {};
 const money = (c, cur = trip.cur) => (fmts[cur] ||= (() => { try { return new Intl.NumberFormat(undefined, { style: 'currency', currency: cur }); } catch { return { format: v => v.toFixed(2) + ' ' + cur }; } })()).format(c / 100);
 const signed = c => (c > 0 ? '+' : c < 0 ? '−' : '') + money(Math.abs(c));
-const hue = id => [...id].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % 360;
+// golden-angle spread so even similar ids (like the demo's g/m/s/l) get clearly different colours
+const hue = id => Math.round([...id].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) * 137.508) % 360;
 const fmtDay = n => new Date((n + EPOCH) * 864e5).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
 const EMO = [[/hotel|airbnb|hostel|room|stay|flat|apartment|b&b|night/i, '🏨'], [/taxi|uber|cab|lyft|bolt/i, '🚕'], [/flight|plane|airport|ryanair|easyjet/i, '✈️'],
   [/tram/i, '🚋'], [/train|metro|bus|subway|ticket/i, '🚆'], [/breakfast|coffee|caf[eé]|past[eé]is|bakery|croissant|gelato/i, '☕'],
@@ -526,6 +652,14 @@ const emoji = d => (EMO.find(([r]) => r.test(d)) || [0, '🧾'])[1];
 
 let trips = store.get('payo.trips', {}), trip, lastCode = '', seq = 0, pending = Promise.resolve(), qrMarkup = null;
 const isFile = location.protocol === 'file:';
+// What the group already has (last shared or received copy), so we can tell what exists only on this device.
+let welcome = null;
+const sentKey = id => 'payo.sent.' + id;
+const sentBase = T => { try { const s = store.get(sentKey(T.id), null); return s && unpack(s); } catch { return null; } };
+const knownBy = inc => { const b = sentBase(inc); store.set(sentKey(inc.id), pack(b ? merge(b, inc) : inc)); };
+const markSent = () => { store.set(sentKey(trip.id), pack(trip)); welcome = null; render(); };
+const unsent = T => { const b = sentBase(T); if (!b) { knownBy(T); return 0; } return changes(b, T); };
+const canShare = !!navigator.share && !isFile;
 const live = T => Object.values(T.exp).filter(e => !(e.f & 1));
 const involved = (T, id) => live(T).some(e => e.p === id || e.s.includes(id));
 const people = T => Object.entries(T.members).filter(([id, m]) => !m.x || involved(T, id))
@@ -546,13 +680,22 @@ function demo() {
 function render() {
   const T = trip, P = people(T), { bal, total, n } = compute(T), active = P.filter(p => !p.x);
   $('#tripName').textContent = T.name; document.title = T.name + ' · Payo';
-  $('#demo').hidden = T.id !== 'demo';
-  $('#total').textContent = money(total);
-  $('#sub').textContent = `${P.length} ${P.length === 1 ? 'person' : 'people'} · ${n} expense${n === 1 ? '' : 's'}` + (P.length ? ` · ${money(Math.round(total / P.length))} per person` : '');
+  // One banner slot: demo intro, else "only on this device" reminder, else a welcome for a trip just received.
+  const u = T.id === 'demo' ? 0 : unsent(T), nm = esc(T.name);
+  const ban = T.id === 'demo' ? ['<b>This is a demo trip.</b> Tap anything to try it, or open <b>?</b> to see how it works.', 'Start your own trip', 'new']
+    : u ? [`<b>${u} change${u > 1 ? 's' : ''} only on this device.</b> Send your link so the group sees ${u > 1 ? 'them' : 'it'}.`, canShare ? 'Share link' : 'Copy link', 'send']
+    : welcome === T.id ? [`<b>You’ve joined “${nm}”.</b> Add what you paid, then send your link back so everyone sees it.`, '+ Add what I paid', 'add'] : null;
+  $('#demo').hidden = !ban;
+  if (ban) { $('#bannerTxt').innerHTML = ban[0]; $('#bannerBtn').textContent = ban[1]; $('#bannerBtn').dataset.act = ban[2]; }
+  $('#total').textContent = money(total); $('#total').classList.toggle('long', money(total).length > 9);
+  $('#sub').textContent = `squeezed so far · ${P.length} ${P.length === 1 ? 'person' : 'people'} · ${n} expense${n === 1 ? '' : 's'}` + (P.length ? ` · ${money(Math.round(total / P.length))} avg per person` : '');
 
-  const max = Math.max(1, ...P.map(p => Math.abs(bal[p.id])));
+  const max = Math.max(1, ...P.map(p => Math.abs(bal[p.id]))), blobs = P.length > 0 && P.length <= 6;
+  $('#bal').className = blobs ? 'bal blobs' + (P.every(p => !bal[p.id]) ? ' flat' : '') : 'bal';
   $('#bal').innerHTML = P.length ? P.map(p => {
     const v = bal[p.id], w = (Math.abs(v) / max * 100).toFixed(1);
+    // up to 6 people: squeezable blobs (full = owed, empty = owes); bigger groups keep the compact bars
+    if (blobs) return `<li><i class="blob squish ${v > 0 ? 'p' : v < 0 ? 'n' : 'z'}" style="--s:${(Math.abs(v) / max).toFixed(3)}" aria-hidden="true"></i><span class="nm">${esc(p.name)}</span><span class="amt ${v > 0 ? 'pos' : v < 0 ? 'neg' : 'mute'}">${v ? signed(v) : 'even'}</span></li>`;
     return `<li><span class="av" style="--h:${hue(p.id)}">${esc(([...p.name][0] || '?').toUpperCase())}</span><span class="nm">${esc(p.name)}</span>
       <span class="bar"><i class="n" style="width:${v < 0 ? w : 0}%"></i><i class="p" style="width:${v > 0 ? w : 0}%"></i></span>
       <span class="amt ${v > 0 ? 'pos' : v < 0 ? 'neg' : 'mute'}">${v ? signed(v) : 'even'}</span></li>`;
@@ -560,9 +703,9 @@ function render() {
 
   const S = settle(bal);
   $('#settle').innerHTML = S.length ? S.map(([f, t, a]) =>
-    `<li><b>${esc(nameOf(f))}</b><span class="mute">pays</span><b>${esc(nameOf(t))}</b><span class="amt">${money(a)}</span>
-     <button data-f="${esc(f)}" data-t="${esc(t)}" data-a="${a}">Mark paid</button></li>`).join('')
-    : `<li class="mute">${n ? 'All square. Nobody owes anything. 🎉' : 'Add an expense and Payo works out who pays whom.'}</li>`;
+    `<li><span class="who"><b>${esc(nameOf(f))}</b><span class="mute">pays</span><b>${esc(nameOf(t))}</b></span><span class="amt">${money(a)}</span>
+     <button data-f="${esc(f)}" data-t="${esc(t)}" data-a="${a}" aria-label="Mark paid: ${esc(nameOf(f))} pays ${esc(nameOf(t))} ${money(a)}">Mark paid</button></li>`).join('')
+    : n ? '<li class="done">All squeezed out! Nobody owes anything. 🎉</li>' : '<li class="mute">Add an expense and Payo works out who pays whom.</li>';
 
   const E = Object.entries(T.exp).filter(([, e]) => !(e.f & 1)).sort(([, a], [, b]) => b.day - a.day || b.t - a.t);
   $('#count').textContent = E.length ? '· ' + E.length : '';
@@ -575,7 +718,7 @@ function render() {
     html += `<button class="exp${pay ? ' pay' : ''}" data-id="${esc(id)}"><span class="emo">${pay ? '🤝' : emoji(e.d)}</span>
       <span class="ex-main"><span class="ex-d">${esc(e.d)}</span><span class="ex-m">${meta}</span></span><span class="ex-a">${money(e.a)}</span></button>`;
   }
-  $('#list').innerHTML = html || '<div class="empty">No expenses yet.<br>Press <kbd>N</kbd> or tap <b>+</b> to add the first one.</div>';
+  $('#list').innerHTML = html || '<div class="empty">No expenses yet.<br>Tap <b>+</b> to add the first one<span class="kbd-only">, or press <kbd>N</kbd></span>.</div>';
 }
 
 function save() { trips[trip.id] = pack(trip); store.set('payo.trips', trips); store.set('payo.cur', trip.id); }
@@ -608,7 +751,7 @@ function backup() {
   const lines = [`Payo backup · ${trip.name} · ${new Date().toLocaleString()}`, ''];
   Object.values(trip.exp).filter(e => !(e.f & 1)).sort((a, b) => a.day - b.day)
     .forEach(e => lines.push(`${dayISO(e.day)}  ${money(e.a).padStart(12)}  ${e.d} (paid by ${nameOf(e.p)})`));
-  lines.push('', 'To restore: open Payo → Your trips → “Open a backup file”, or open this link:', location.href);
+  lines.push('', 'To restore: open Payo → Merge a link → “Or open a backup file”, or open this link:', location.href);
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/plain' }));
   a.download = `Payo - ${trip.name.replace(/[\\/:*?"<>|]/g, '')}.txt`;
@@ -618,21 +761,23 @@ function backup() {
 const readFile = f => f && f.text().then(t => openCode(extract(t))).then(ok => ok && document.querySelector('dialog[open]')?.close());
 const commit = fn => { fn(); save(); render(); sync(); };
 
-async function openCode(code) {
+async function openCode(code, quiet) {
   let inc;
-  try { inc = await decode(code); } catch { toast('That doesn’t look like a Payo link.'); return false; }
+  try { inc = await decode(code); } catch { if (!quiet) toast('That doesn’t look like a Payo link. Paste the whole link or code your friend sent.'); return false; }
   let local = null; try { local = trips[inc.id] && unpack(trips[inc.id]); } catch {}
   if (local) {
     const m = merge(local, inc), ch = changes(local, m);
+    if (ch) knownBy(inc); // whoever sent this link has everything in it (skipped when it's just our own link reopened)
     trip = m;
     toast(ch ? `Merged ${ch} change${ch > 1 ? 's' : ''} into “${m.name}”.` : `“${m.name}” is already up to date.`);
-  } else { trip = inc; toast(`Opened “${inc.name}”.`); }
+  } else { knownBy(inc); welcome = inc.id; trip = inc; toast(`Opened “${inc.name}”.`); }
   save(); render(); sync(); return true;
 }
 
 let toastT;
 function toast(msg, act) {
   const el = $('#toast'); el.textContent = msg;
+  (document.querySelector('dialog[open]') || document.body).append(el); // an open modal dialog covers the page, so show the message inside it
   if (act) { const b = document.createElement('button'); b.textContent = act[0]; b.onclick = () => { act[1](); el.classList.remove('on'); }; el.append(b); }
   el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), act ? 5000 : 2800);
 }
@@ -647,13 +792,20 @@ function openExp(id) {
   $('#expTitle').textContent = e ? (e.f & 2 ? 'Edit payment' : 'Edit expense') : 'New expense';
   F.d.value = e ? e.d : ''; F.a.value = e ? (e.a / 100).toFixed(2) : ''; F.a.classList.remove('err');
   F.day.value = dayISO(e ? e.day : today());
-  F.p.innerHTML = people(trip).filter(p => !p.x || p.id === e?.p).map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
-  F.p.value = e ? e.p : store.get('payo.payer.' + trip.id, '');
-  if (!F.p.value) F.p.selectedIndex = 0;
+  // No guessed payer: a friend's first expense must not be credited to whoever is first in the list.
+  const last = store.get('payo.payer.' + trip.id, '');
+  F.p.value = e ? e.p : P.some(p => p.id === last) ? last : '';
+  drawPayers(e?.p);
+  $('#payErr').textContent = ''; $('#calcOut').classList.remove('err-msg'); $('#each').classList.remove('err-msg'); F.a.removeAttribute('aria-invalid');
   sel = new Set(e ? e.s : P.map(p => p.id));
   $('#delBtn').hidden = !e;
   drawChips(); dlgExp.showModal(); setTimeout(() => (e ? F.a : F.d).focus());
 }
+function drawPayers(keep) {
+  $('#payChips').innerHTML = people(trip).filter(p => !p.x || p.id === keep)
+    .map(p => `<button type="button" class="chip" role="radio" data-id="${esc(p.id)}" aria-checked="${p.id === F.p.value}">${esc(p.name)}</button>`).join('');
+}
+$('#payChips').onclick = e => { const c = e.target.closest('.chip'); if (!c) return; F.p.value = c.dataset.id; $('#payErr').textContent = ''; drawPayers(F.p.value); };
 function drawChips() {
   $('#chips').innerHTML = people(trip).filter(p => !p.x || sel.has(p.id))
     .map(p => `<button type="button" class="chip" data-id="${esc(p.id)}" aria-pressed="${sel.has(p.id)}">${esc(p.name)}</button>`).join('');
@@ -661,11 +813,12 @@ function drawChips() {
 }
 function updEach() {
   let v = null; try { v = calc(F.a.value); } catch {}
+  $('#calcOut').classList.remove('err-msg'); $('#each').classList.toggle('err-msg', !sel.size);
   $('#calcOut').textContent = v != null && /\d[-+*/x×(]|\)/.test(F.a.value.replace(/\s/g, '')) ? '= ' + money(Math.round(v * 100)) : '';
   const k = sel.size, who = `${k} ${k === 1 ? 'person' : 'people'}`;
-  $('#each').textContent = !k ? 'Pick at least one person.' : v > 0 ? `${money(Math.round(v * 100 / k))} each · ${who}` : `Split between ${who}`;
+  $('#each').textContent = !k ? 'Pick at least one person.' : v > 0 ? `${money(Math.round(v * 100 / k))} each · ${who}` : `${who} selected`;
 }
-F.a.oninput = () => { F.a.classList.remove('err'); updEach(); };
+F.a.oninput = () => { F.a.classList.remove('err'); F.a.removeAttribute('aria-invalid'); updEach(); };
 $('#chips').onclick = e => {
   const c = e.target.closest('.chip'); if (!c) return;
   const id = c.dataset.id; sel.has(id) ? sel.delete(id) : sel.add(id);
@@ -675,13 +828,16 @@ $('#allBtn').onclick = () => { const P = people(trip).filter(p => !p.x); sel = s
 F.onsubmit = e => {
   e.preventDefault();
   let a = NaN; try { a = Math.round(calc(F.a.value) * 100); } catch {}
-  if (!(a > 0 && a < 1e11)) { F.a.classList.add('err'); F.a.focus(); toast('Enter an amount, like 24.50 or 3×14.50.'); return; }
-  if (!sel.size) { toast('Pick at least one person to split with.'); return; }
+  if (!(a > 0 && a < 1e11)) { F.a.classList.add('err'); F.a.setAttribute('aria-invalid', 'true'); $('#calcOut').textContent = 'Enter an amount, like 24.50 or 3×14.50.'; $('#calcOut').classList.add('err-msg'); F.a.focus(); return; }
+  if (!F.p.value) { $('#payErr').textContent = 'Tap who paid.'; $('#payChips .chip')?.focus(); return; }
+  if (!sel.size) { $('#each').classList.add('err-msg'); $('#each').textContent = 'Pick at least one person to split with.'; return; }
   const old = editing && trip.exp[editing], id = editing || rid(), order = Object.keys(trip.members);
   commit(() => trip.exp[id] = { d: F.d.value.trim() || 'Expense', a, p: F.p.value, s: order.filter(k => sel.has(k)),
     day: isoDay(F.day.value) ?? today(), t: now(), f: old ? old.f & 2 : 0 });
   store.set('payo.payer.' + trip.id, F.p.value);
-  dlgExp.close(); toast(old ? 'Saved.' : `Added ${money(a)}.`);
+  dlgExp.close();
+  if (trip.id === 'demo') toast(old ? 'Saved.' : `Added ${money(a)}.`);
+  else toast(old ? 'Saved. Send your link so the group sees it.' : `Added ${money(a)}. Send your link so the group sees it.`, [canShare ? 'Share' : 'Copy link', send]);
 };
 $('#delBtn').onclick = () => {
   const id = editing, old = trip.exp[id];
@@ -704,22 +860,29 @@ $('#addPerson').onsubmit = e => {
   commit(() => trip.members[rid()] = { name: n.slice(0, 24), t: now() }); i.value = '';
 };
 $('#addBtn').onclick = $('#fab').onclick = () => openExp();
+$('#bal').addEventListener('pointerdown', e => { const b = e.target.closest('li')?.querySelector('.blob'); if (b) { b.classList.remove('squish'); void b.offsetWidth; b.classList.add('squish'); } });
+// every dialog is named by its heading for screen readers
+document.querySelectorAll('dialog').forEach((d, i) => { const h = d.querySelector('h3'); if (h) { h.id ||= 'dlgTitle' + i; d.setAttribute('aria-labelledby', h.id); } });
 
 async function copyLink() {
   await pending; const url = location.href; let ok = false;
   try { await navigator.clipboard.writeText(url); ok = true; }
   catch { const t = document.createElement('textarea'); t.value = url; document.body.append(t); t.select(); try { ok = document.execCommand('copy'); } catch {} t.remove(); }
   const tk = $('#ticket'); tk.classList.remove('flash'); void tk.offsetWidth; tk.classList.add('flash');
+  if (ok) markSent();
   toast(!ok ? 'Couldn’t copy. Copy the address bar instead.' : isFile ? 'Copied. Friends paste it into “Merge a link”.' : 'Link copied. Drop it in your group chat.');
 }
+async function shareLink() {
+  await pending;
+  try { await navigator.share({ title: trip.name + ' · Payo', text: `Add your expenses for “${trip.name}”, then send the link back:`, url: location.href }); markSent(); } catch {}
+}
+const send = () => (canShare ? shareLink : copyLink)();
 $('#copyBtn').onclick = copyLink;
 $('#sizeBtn').onclick = () => { $('#ticket').scrollIntoView({ behavior: 'smooth', block: 'center' }); const tk = $('#ticket'); tk.classList.remove('flash'); void tk.offsetWidth; tk.classList.add('flash'); };
-if (navigator.share && !isFile) {
-  const b = $('#nativeShare'); b.hidden = false;
-  b.onclick = async () => { await pending; try { await navigator.share({ title: trip.name + ' · Payo', text: `Add your expenses for “${trip.name}”, then send the link back:`, url: location.href }); } catch {} };
-}
+if (canShare) { const b = $('#nativeShare'); b.hidden = false; b.onclick = shareLink; $('#share2').textContent = 'Share link'; }
+$('#share2').onclick = send;
 $('#fileNote').hidden = !isFile;
-$('#qrBtn').onclick = $('#qrShow').onclick = openQr;
+$('#qrBtn').onclick = $('#qrShow').onclick = $('#qr2').onclick = openQr;
 $('#qrCopy').onclick = copyLink;
 $('#backupBtn').onclick = backup;
 $('#fileIn').onchange = e => { readFile(e.target.files[0]); e.target.value = ''; };
@@ -727,27 +890,41 @@ addEventListener('dragover', e => e.preventDefault());
 addEventListener('drop', e => { e.preventDefault(); readFile(e.dataTransfer.files[0]); });
 
 /* ---- trips dialog ---- */
-const dlgTrips = $('#dlgTrips');
-function openTrips(focus) { renderTrips(); $('#newForm').c.innerHTML = curOpts(guessCur()); dlgTrips.showModal(); setTimeout(() => $(focus || '#mergeForm input').focus()); }
+const dlgTrips = $('#dlgTrips'), dlgNew = $('#dlgNew'), dlgMerge = $('#dlgMerge');
+function openTrips() { renderTrips(); dlgTrips.showModal(); }
+function openNew() { document.querySelector('dialog[open]')?.close(); $('#newForm').c.innerHTML = curOpts(guessCur()); dlgNew.showModal(); setTimeout(() => $('#newForm').n.focus()); }
+function openMerge() { document.querySelector('dialog[open]')?.close(); $('#mergeErr').textContent = ''; $('#mergeForm').l.classList.remove('err'); dlgMerge.showModal(); setTimeout(() => $('#mergeForm input').focus()); }
+$('#toNew').onclick = openNew; $('#toMerge').onclick = openMerge;
 function renderTrips() {
   $('#tripList').innerHTML = Object.keys(trips).map(id => {
     let T; try { T = unpack(trips[id]); } catch { return ''; }
     const cur = id === trip.id;
-    return `<li><button class="go${cur ? ' cur' : ''}" data-go="${esc(id)}"><span><b>${esc(T.name)}</b><br><span class="mute small">${people(T).length} people · ${money(compute(T).total, T.cur)}</span></span>${cur ? '<span class="mute small">open</span>' : ''}</button>
+    return `<li><button class="go${cur ? ' cur' : ''}" data-go="${esc(id)}"><span><b>${esc(T.name)}</b><span class="mute small">${people(T).length} people · ${money(compute(T).total, T.cur)}</span></span>${cur ? '<span class="mute small">current</span>' : ''}</button>
       <button class="ghost rm" data-rm="${esc(id)}" title="Remove from this device">Remove</button></li>`;
   }).join('');
 }
 $('#tripList').onclick = e => {
   const g = e.target.closest('[data-go]'), r = e.target.closest('[data-rm]');
   if (g) { trip = unpack(trips[g.dataset.go]); save(); render(); sync(); dlgTrips.close(); }
-  else if (r && !r.dataset.sure) { r.dataset.sure = 1; r.textContent = 'Sure?'; r.classList.add('danger'); }
+  else if (r && !r.dataset.sure) {
+    r.dataset.sure = 1; r.textContent = 'Sure?'; r.classList.add('danger');
+    toast('This deletes the trip from this device. Expenses not yet shared in a link or backup are lost.', ['Back up first', async () => {
+      trip = unpack(trips[r.dataset.rm]); save(); render(); sync(); await pending; backup(); renderTrips();
+    }]);
+  }
   else if (r) {
     const id = r.dataset.rm; delete trips[id]; store.set('payo.trips', trips);
     if (id === trip.id) { const nx = Object.keys(trips)[0]; trip = nx ? unpack(trips[nx]) : demo(); save(); render(); sync(); }
     renderTrips();
   }
 };
-$('#mergeForm').onsubmit = async e => { e.preventDefault(); const v = e.target.l.value; if (v.trim() && await openCode(extract(v))) { e.target.reset(); dlgTrips.close(); } };
+$('#mergeForm').onsubmit = async e => {
+  e.preventDefault(); const i = e.target.l, v = i.value; if (!v.trim()) return;
+  if (await openCode(extract(v), true)) { e.target.reset(); dlgMerge.close(); return; }
+  i.classList.add('err'); i.setAttribute('aria-invalid', 'true'); i.focus();
+  $('#mergeErr').textContent = 'That doesn’t look like a Payo link. Paste the whole link or code your friend sent.';
+};
+$('#mergeForm').l.oninput = e => { e.target.classList.remove('err'); e.target.removeAttribute('aria-invalid'); $('#mergeErr').textContent = ''; };
 $('#newForm').onsubmit = e => {
   e.preventDefault(); const f = e.target, seen = new Set();
   const names = f.m.value.split(/,|;|\n|&|\band\b/).map(s => s.trim().slice(0, 24)).filter(s => s && !seen.has(s.toLowerCase()) && seen.add(s.toLowerCase()));
@@ -755,24 +932,26 @@ $('#newForm').onsubmit = e => {
   const t = now();
   trip = { id: rid(8), name: f.n.value.trim() || 'New trip', cur: f.c.value, t, members: {}, exp: {} };
   names.slice(0, 40).forEach(name => trip.members[rid()] = { name, t });
-  save(); render(); sync(); f.reset(); dlgTrips.close();
-  toast(`“${trip.name}” is ready. Press N to add the first expense.`);
+  save(); render(); sync(); f.reset(); dlgNew.close();
+  toast(`“${trip.name}” is ready. Use + to add the first expense.`);
 };
 $('#tripBtn').onclick = () => openTrips();
-$('#mergeBtn').onclick = () => openTrips('#mergeForm input');
-$('#startOwn').onclick = () => openTrips('#newForm input');
+$('#mergeBtn').onclick = openMerge;
+$('#bannerBtn').onclick = e => ({ new: openNew, send, add: () => openExp() })[e.currentTarget.dataset.act]();
 
 /* ---- settings dialog ---- */
 const dlgSet = $('#dlgSet'), SF = $('#setForm');
-$('#settingsBtn').onclick = () => {
+function openSettings() {
+  document.querySelector('dialog[open]')?.close();
   SF.n.value = trip.name; SF.c.innerHTML = curOpts(trip.cur);
   $('#setPeople').innerHTML = Object.entries(trip.members).filter(([, m]) => !m.x).map(([id, m]) => {
     const inv = involved(trip, id);
     return `<div class="prow"><input data-id="${esc(id)}" value="${esc(m.name)}" maxlength="24" aria-label="Name">
-      <button type="button" class="ghost" data-rm ${inv ? 'disabled title="Has expenses, so can’t be removed"' : 'title="Remove"'}>✕</button></div>`;
+      <button type="button" class="ghost" data-rm ${inv ? 'disabled title="Has expenses, so can’t be removed"' : 'title="Remove"'} aria-label="Remove person"><svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>`;
   }).join('');
   dlgSet.showModal();
-};
+}
+$('#settingsBtn').onclick = $('#toSettings').onclick = openSettings;
 $('#setPeople').onclick = e => { const b = e.target.closest('[data-rm]'); if (b && !b.disabled) b.parentElement.remove(); };
 SF.onsubmit = e => {
   e.preventDefault(); const t = now(), keep = new Set();
@@ -793,8 +972,8 @@ const sysDark = matchMedia('(prefers-color-scheme: dark)');
 function applyTheme(t = store.get('payo.theme', null)) {
   const d = t || (sysDark.matches ? 'dark' : 'light'), r = document.documentElement;
   r.dataset.theme = d; r.style.colorScheme = d; // native controls (date picker, selects) follow the chosen theme, not the system
-  $('meta[name=theme-color]').content = d === 'dark' ? '#11100e' : '#f4efe6'; // Safari's top bar
-  $('#themeBtn').textContent = d === 'dark' ? '☀' : '☾';
+  $('meta[name=theme-color]').content = d === 'dark' ? '#13161f' : '#f5ead0'; // Safari's top bar
+  $('#themeBtn').innerHTML = d === 'dark' ? '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6L13 13M3 13l1.4-1.4M11.6 4.4L13 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>' : '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 10.2A6 6 0 0 1 5.8 2.5a6 6 0 1 0 7.7 7.7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 }
 sysDark.addEventListener?.('change', () => applyTheme());
 const toggleTheme = () => { const n = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; store.set('payo.theme', n); applyTheme(n); };
@@ -807,7 +986,7 @@ document.addEventListener('click', e => {
 const typing = () => document.querySelector('dialog[open]') || /INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName);
 addEventListener('keydown', e => {
   if (e.metaKey || e.ctrlKey || e.altKey || typing()) return;
-  const act = { n: () => openExp(), s: copyLink, g: () => openTrips(), m: () => openTrips('#mergeForm input'), q: openQr, b: backup, t: toggleTheme, '?': () => $('#dlgHelp').showModal(), h: () => $('#dlgHelp').showModal() }[e.key.toLowerCase()];
+  const act = { n: () => openExp(), s: copyLink, g: () => openTrips(), m: openMerge, q: openQr, b: backup, t: toggleTheme, '?': () => $('#dlgHelp').showModal(), h: () => $('#dlgHelp').showModal() }[e.key.toLowerCase()];
   if (act) { e.preventDefault(); act(); }
 });
 document.addEventListener('paste', e => {
